@@ -165,6 +165,78 @@ double WINAPI xll_option_bsm_put(double S, double sigma, double k, double r, dou
 	return result;
 }
 
+AddIn xai_option_black_call(
+    Function(XLL_DOUBLE, L"xll_option_black_call", CATEGORY L".BLACK.CALL")
+    .Arguments({
+        Arg(XLL_DOUBLE, L"f", L"is the forward price."),
+        Arg(XLL_DOUBLE, L"s", L"is the volatility."),
+        Arg(XLL_DOUBLE, L"k", L"is the strike price."),
+        Arg(XLL_HANDLEX, L"m", L"is the handle to a model."),
+        })
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return price of a European call option under the model.")
+);
+double WINAPI xll_option_black_call(double f, double s, double k, HANDLEX m)
+{
+#pragma XLLEXPORT
+    double result = NaN<double>;
+
+    try {
+        handle<model<>> m_(m);
+        ensure(m_);
+        result = black::call(f, s, k, *m_);
+    }
+    catch (const std::exception& ex) {
+        XLL_ERROR(ex.what());
+    }
+    catch (...) {
+        XLL_ERROR(__FUNCTION__ ": unknown exception");
+    }
+
+    return result;
+}
+
+AddIn xai_option_bsm_call(
+    Function(XLL_DOUBLE, L"xll_option_bsm_call", CATEGORY L".BSM.CALL")
+    .Arguments({
+        Arg(XLL_DOUBLE, L"S", L"is the spot price."),
+        Arg(XLL_DOUBLE, L"sigma", L"is the volatility."),
+        Arg(XLL_DOUBLE, L"k", L"is the strike price."),
+        Arg(XLL_DOUBLE, L"r", L"is the risk-free rate."),
+        Arg(XLL_DOUBLE, L"t", L"is the time to expiration."),
+        Arg(XLL_HANDLEX, L"m", L"is the handle to a model."),
+        })
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return price of a European call option under the BSM model.")
+);
+double WINAPI xll_option_bsm_call(double S, double sigma, double k, double r, double t, HANDLEX m)
+{
+#pragma XLLEXPORT
+    double result = NaN<double>;
+
+    try {
+        handle<model<>> m_(m);
+        ensure(m_);
+
+        // BSM to Black Model transformation
+        // Forward price F = S * exp(r * t)
+        double f = S * exp(r * t);
+        // Integrated volatility s = sigma * sqrt(t)
+        double stdev = sigma * sqrt(t);
+
+        // Calculate Black call price and discount to present value: PV = exp(-r * t) * Black
+        result = exp(-r * t) * black::call(f, stdev, k, *m_);
+    }
+    catch (const std::exception& ex) {
+        XLL_ERROR(ex.what());
+    }
+    catch (...) {
+        XLL_ERROR(__FUNCTION__ ": unknown exception");
+    }
+
+    return result;
+}
+
 // TODO: implement OPTION.BLACK.PUT
 
 
