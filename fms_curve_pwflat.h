@@ -65,12 +65,12 @@ namespace fms::curve {
 		// TODO: change time return pointer constant T*
 		const auto time() const
 		{
-			return 0; // fms::iterable::make_interval(t_);
+			return t_.data(); // fms::iterable::make_interval(t_);
 		}
 		// TODO: change rate return pointer constant F*
 		const auto rate() const
 		{
-			return 0; // fms::iterable::make_interval(f_);
+			return f_.data(); // fms::iterable::make_interval(f_);
 		}
 
 		pwflat& push_back(T t, F f)

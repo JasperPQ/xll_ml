@@ -70,7 +70,7 @@ namespace fms::value {
 	inline auto yield(const instrument::base<U, C>& i, C p = 0,
 		C y0 = 0.01, C tol = math::sqrt_epsilon<C>, int iter = 100)
 	{
-		const auto pv = [p, &i](C y_) { return present(i, curve::constant<U, C>(y_)) - p; };
+		const auto pv = [&i, p](C y_) { return present(i, curve::constant<U, C>(y_)) - p; };
 
 		return root1d::secant(y0, y0 + 0.1, tol, iter).solve(pv);
 	}

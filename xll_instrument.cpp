@@ -12,7 +12,7 @@ AddIn xai_instrument_(
 		Arg(XLL_FP, L"c", L"is the vector of cash flow amounts."),
 		})
 		.Uncalced()
-		.Category(CATEGORY)
+	.Category(CATEGORY)
 	.FunctionHelp(L"Return a handle to an instrument with cash flows c at times u.")
 );
 HANDLEX WINAPI xll_instrument_(_FP12* pu, _FP12* pc)
@@ -21,7 +21,7 @@ HANDLEX WINAPI xll_instrument_(_FP12* pu, _FP12* pc)
 	HANDLEX h = INVALID_HANDLEX;
 
 	try {
-		handle<instrument::fixed_income<>> h_(new instrument::fixed_income(span(*pu), span(*pc)));
+		handle<instrument::base<>> h_(new instrument::fixed_income(span(*pu), span(*pc)));
 		ensure(h_);
 		h = h_.get();
 	}
@@ -49,7 +49,7 @@ _FP12* WINAPI xll_instrument(HANDLEX h)
 	static FPX uc;
 
 	try {
-		handle<instrument::fixed_income<>> h_(h);
+		handle<instrument::base<>> h_(h);
 		ensure(h_);
 		int n = static_cast<int>(h_->size());
 		uc.resize(2, n);
@@ -86,7 +86,7 @@ HANDLEX WINAPI xll_zero_coupon_bond(double u, double c)
 		if (c == 0) {
 			c = 1;
 		}
-		handle<instrument::fixed_income<>> h_(new instrument::zero_coupon_bond<>(u, c));
+		handle<instrument::base<>> h_(new instrument::zero_coupon_bond<>(u, c));
 		ensure(h_);
 		h = h_.get();
 	}
@@ -115,7 +115,7 @@ HANDLEX WINAPI xll_bond(double u, double c, UINT f)
 #pragma XLLEXPORT
 	HANDLEX h = INVALID_HANDLEX;
 	try {
-		handle<instrument::fixed_income<>> h_(new instrument::bond(u, c, static_cast<instrument::frequency>(f)));
+		handle<instrument::base<>> h_(new instrument::bond(u, c, static_cast<instrument::frequency>(f)));
 		ensure(h_);
 		h = h_.get();
 	}

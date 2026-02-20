@@ -21,7 +21,7 @@ HANDLEX WINAPI xll_curve_pwflat_(_FP12* pt, _FP12* pf, double _f)
 	HANDLEX h = INVALID_HANDLEX;
 
 	try {
-		handle<curve::base<>> h_(new curve::pwflat(span(*pt), span(*pf)));
+		handle<curve::pwflat<>> h_(new curve::pwflat(span(*pt), span(*pf)));
 		ensure(h_);
 		h = h_.get();
 	}
@@ -34,3 +34,37 @@ HANDLEX WINAPI xll_curve_pwflat_(_FP12* pt, _FP12* pf, double _f)
 
 	return h;
 }
+
+static AddIn xai_curve_pwflat(
+	Function(XLL_FP, L"xll_curve_pwflat", CATEGORY L".CURVE.PWFLAT")
+	.Arguments({
+		Arg(XLL_HANDLEX, L"h", L"is a handle to a pwflat curve."),
+		})
+	.Category(CATEGORY)
+	.FunctionHelp(L"Return a two row array of times and rates.")
+);
+_FP12* WINAPI xll_curve_pwflat(HANDLEX h)
+{
+#pragma XLLEXPORT
+	static FPX tf;
+
+	try {
+		tf.resize(0, 0);
+		handle<curve::pwflat<>> h_(h);
+		ensure(h_);
+		int n = (int)h_->size();
+		tf.resize(2, n);
+		std::copy_n(h_->time(), n, tf.array());
+		std::copy_n(h_->rate(), n, tf.array() + n);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+	catch (...) {
+		XLL_ERROR(__FUNCTION__ ": unknown exception");
+	}
+
+	return tf.get();
+}
+
+// TODO: Implement CURVE.PWFLAT.FORWARD, CURVE.PWFLAT.DISCOUNT, CURVE.PWFLAT.SPOT
