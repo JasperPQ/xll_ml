@@ -1,8 +1,8 @@
 // xll_bootstrap.cpp - bootstrap functions
 // TODO: Implement \FI.CURVE.PWFLAT.BOOTSTRAP(instruments, prices) 
  
-using namespace fms;
-using namespace xll;
+//using namespace fms;
+//using namespace xll;
 
 /* TODO: Hints
 handle<curve::pwflat> WINAPI xll_fi_curve_bootstrap(_FP12* pi, _FP12* pp) { ...

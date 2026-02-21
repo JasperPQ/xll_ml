@@ -14,7 +14,7 @@ namespace fms::root1d {
 		}
 
 		if (x < a) {
-			return (x0 + a) / 2;j
+			return (x0 + a) / 2;
 		}
 		else if (x > b) {
 			return (x0 + b) / 2;
@@ -58,7 +58,7 @@ namespace fms::root1d {
 			bool bounded = !math::samesign(y0, y1);
 			size_t n = 0;
 
-			while (++n < iterations && math::fabs(y1) > tolerance) {
+			while (++n < iterations && math::abs(y1) > tolerance) {
 				auto x = next(x0, y0, x1, y1);
 				Y y = f(x);
 				if (bounded && math::samesign(y, y1)) {
@@ -84,7 +84,7 @@ namespace fms::root1d {
 		{
 			{
 				constexpr double x = std::get<0>(solve([](double x) { return x * x - 4; }, 0., 1.));
-				static_assert(math::fabs(x - 2) <= math::sqrt_epsilon<double>);
+				static_assert(math::abs(x - 2) <= math::sqrt_epsilon<double>);
 			}
 
 			return 0;
@@ -116,7 +116,7 @@ namespace fms::root1d {
 		{
 			auto y0 = f(x0);
 			size_t n = 0;
-			while (++n < iterations && math::fabs(y0) > tolerance) {
+			while (++n < iterations && math::abs(y0) > tolerance) {
 				auto x = next(x0, y0, df(x0));
 				x0 = bracket(x, x0, a, b);
 				y0 = f(x0);
@@ -132,7 +132,7 @@ namespace fms::root1d {
 		{
 			{
 				constexpr double x = std::get<0>(solve([](double x) { return x * x - 4; }, [](double x) { return 2 * x; }, 1.));
-				static_assert(math::fabs(x - 2) < math::sqrt_epsilon<double>);
+				static_assert(math::abs(x - 2) < math::sqrt_epsilon<double>);
 			}
 
 			return 0;

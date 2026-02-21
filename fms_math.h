@@ -32,14 +32,23 @@ namespace fms::math {
 	{
 		return n == 0 ? 1 : n > 0 ? x * pow(x, n - 1) : 1 / pow(x, -n);
 	}
+
+	template<class X>
+	constexpr bool samesign(X x, X y)
+	{
+		return (x > 0 && y > 0) || (x < 0 && y < 0);
+	}
+
 	// Constexpr square root using Newton-Raphson method
 	template<class X>
-	constexpr X sqrt(X x, X guess, int iterations = 10) {
+	constexpr X sqrt(X x, X guess, int iterations = 10) 
+	{
 		return iterations == 0 ? guess : sqrt(x, (guess + x / guess) / 2, iterations - 1);
 	}
 
 	template<class X>
-	constexpr X sqrt(X x) {
+	constexpr X sqrt(X x) 
+	{
 		return x == 0 ? 0 : sqrt(x, x / 2, 20);
 	}
 

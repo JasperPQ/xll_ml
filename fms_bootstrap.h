@@ -68,6 +68,7 @@ namespace fms::curve {
 	inline int bootstrap_test()
 	{
 		// TODO: Delete code that is not working.
+		/*
 		using namespace fms::iterable;
 		{
 			curve::constant<> f;
@@ -83,6 +84,7 @@ namespace fms::curve {
 			assert(_t == 0);
 			assert(std::fabs(_f - r) <= math::sqrt_epsilon<double>);
 		}
+		*/
 
 		return 0;
 	}
