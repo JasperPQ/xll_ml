@@ -1,6 +1,6 @@
 // xll_curve.cpp - curve functions
-#include "xll_fi.h"
 #include "fms_curve_pwflat.h"
+#include "xll_fi.h"
 
 using namespace xll;
 using namespace fms;
@@ -68,5 +68,94 @@ _FP12* WINAPI xll_curve_pwflat(HANDLEX h)
 	return tf.get();
 }
 
-// TODO: Implement CURVE.FORWARD, CURVE.DISCOUNT, CURVE.SPOT
+// TODO:NE Implement CURVE.FORWARD, CURVE.DISCOUNT, CURVE.SPOT
 // use `handle<curve::base<>> h_(h)
+AddIn xai_curve_forward(
+	Function(XLL_DOUBLE, L"?xll_curve_forward", CATEGORY L".CURVE.FORWARD")
+	.Arguments({
+		Arg(XLL_HANDLEX, L"c", L"is a handle to a curve."),
+		Arg(XLL_DOUBLE, L"t", L"is the time at which the forward is evaluated."),
+		})
+		.Category(CATEGORY)
+	.FunctionHelp(L"Return the forward rate at the given time.")
+);
+double WINAPI xll_curve_forward(HANDLEX c, double t)
+{
+#pragma XLLEXPORT
+	double result = math::NaN<>;
+
+	try {
+		handle<curve::base<>> c_(c);
+		ensure(c_);
+
+		result = c_->forward(t);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+	catch (...) {
+		XLL_ERROR(__FUNCTION__ ": unknown exception");
+	}
+
+	return result;
+}
+
+AddIn xai_curve_discount(
+	Function(XLL_DOUBLE, L"?xll_curve_discount", CATEGORY L".CURVE.DISCOUNT")
+	.Arguments({
+		Arg(XLL_HANDLEX, L"c", L"is a handle to a curve."),
+		Arg(XLL_DOUBLE, L"t", L"is the time at which the discount is evaluated."),
+		})
+		.Category(CATEGORY)
+	.FunctionHelp(L"Return the discount rate at the given time.")
+);
+double WINAPI xll_curve_discount(HANDLEX c, double t)
+{
+#pragma XLLEXPORT
+	double result = math::NaN<>;
+
+	try {
+		handle<curve::base<>> c_(c);
+		ensure(c_);
+
+		result = c_->discount(t);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+	catch (...) {
+		XLL_ERROR(__FUNCTION__ ": unknown exception");
+	}
+
+	return result;
+}
+
+AddIn xai_curve_spot(
+	Function(XLL_DOUBLE, L"?xll_curve_spot", CATEGORY L".CURVE.SPOT")
+	.Arguments({
+		Arg(XLL_HANDLEX, L"c", L"is a handle to a curve."),
+		Arg(XLL_DOUBLE, L"t", L"is the time at which the spot is evaluated."),
+		})
+		.Category(CATEGORY)
+	.FunctionHelp(L"Return the spot rate at the given time.")
+);
+double WINAPI xll_curve_spot(HANDLEX c, double t)
+{
+#pragma XLLEXPORT
+	double result = math::NaN<>;
+
+	try {
+		handle<curve::base<>> c_(c);
+		ensure(c_);
+
+		result = c_->spot(t);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+	catch (...) {
+		XLL_ERROR(__FUNCTION__ ": unknown exception");
+	}
+
+	return result;
+}

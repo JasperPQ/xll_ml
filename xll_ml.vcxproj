@@ -231,6 +231,7 @@
     <ClInclude Include="xll_ml.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="xll_array_sequence.cpp" />
     <ClCompile Include="xll_bootstrap.cpp" />
     <ClCompile Include="xll_curve_pwflat.cpp" />
     <ClCompile Include="xll_instrument.cpp">
